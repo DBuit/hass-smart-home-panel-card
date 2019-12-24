@@ -48,7 +48,7 @@ class CustomSmartHomePanelCard extends LitElement {
           </div>
           
           <div class="main">
-            
+            <div class="inner-main" style="width:${this.config.entities.length * 150}px;">
             ${this.config.entities.map(ent => {
                 entityCounter++;
                 var switchValue = 0;
@@ -86,6 +86,7 @@ class CustomSmartHomePanelCard extends LitElement {
                     </div>
                 `: html``;
             })}
+            </div>
           </div>
         </div>
     `;
@@ -186,16 +187,17 @@ class CustomSmartHomePanelCard extends LitElement {
         
         .page > .main {
           width:70%;
-          display:flex;
-          flex-direction:row;
-          align-items: center;
-          justify-content: center;
+          overflow-x:scroll;
         }
-        
-        .page > .main > .light {
+        .page > .main > .inner-main {
+            display:flex;
+            flex-direction:row;
+            align-items:center;
+            height:100%;
+        }
+        .page > .main > .inner-main > .light {
           width:150px;
           display:inline-block;
-          
         }
         
         .light .icon {
