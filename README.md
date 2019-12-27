@@ -19,6 +19,7 @@ Panel lovelace card
 | `showButton` | string | optional | "show" | Use show to display a button in the left sidebar |
 | `buttonText` | string | optional | "Home" | Set the text in the button |
 | `buttonPath` | string | optional | "/lovelace/0" | Set the path you wan't the page to navigate to when clicking the button |
+| `background` | string | optional | "#1c1d1f" | Set the background color for the card |
 
 #example configuration
 ```
@@ -28,7 +29,10 @@ Panel lovelace card
   showButton: "show"
   buttonText: "Test"
   buttonPath: "/lovelace/0"
+  background: "#1c1d1f"
   entities:
     - entity: light.beganegrond
     - entity: light.voordeurlicht
 ```
+
+![desktop screenshot](screenshot.png "Desktop screenshot")
