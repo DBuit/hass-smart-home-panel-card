@@ -1,6 +1,6 @@
 # Home assistant smart home panel card
-Panel lovelace card
 
+Panel lovelace card for tablets to control your home based on atmos home.
 
 ## Configuration
 
