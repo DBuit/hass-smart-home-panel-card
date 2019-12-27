@@ -23,27 +23,29 @@ class CustomSmartHomePanelCard extends LitElement {
     var switchWidth = this.config.switchWidth ? this.config.switchWidth : "100px";
     var switchHeight = this.config.switchHeight ? this.config.switchHeight : "300px";
     
-    var count = 0;
     var countText = this.config.countText ? this.config.countText : "lights on";
     var entityCounter = 0;
     
+    var showButton = this.config.showButton == "show" ? true : false;
+    var buttonText = this.config.buttonText ? this.config.buttonText : "Home";
+    var buttonPath = this.config.buttonPath ? this.config.buttonPath : "/lovelace/0";
     console.log(this.config);
     
     return html`
         <div class="page">
           <div class="side">
             <div class="header">
-              Header
+              
             </div>
             <div class="center">
               <div class="icon">
                 <ha-icon icon="${this.config.icon}" />
               </div>
               <h1>${this.config.title}</h1>
-              <h3>${count} ${countText}</h3>
+              <h3>${this._stateCount()} ${countText}</h3>
             </div>
             <div class="bottom">
-              <button class="back-btn">Home</button>
+                ${showButton ? html`<button class="back-btn" @click=${e => this._navigate(buttonPath)}>${buttonText}</button>` : html``}
             </div>
           </div>
           
@@ -80,7 +82,7 @@ class CustomSmartHomePanelCard extends LitElement {
                         `}
                       </div>
                       <div class="toggle">
-                        <input ?checked=${stateObj.state == "on"} type="checkbox" id='toggle${entityCounter}' class='toggle-btn' />
+                        <input ?checked=${stateObj.state == "on"} type="checkbox" id='toggle${entityCounter}' class='toggle-btn' @change=${e => this._switch(stateObj)} />
                         <label for='toggle${entityCounter}'><span></span></label>
                       </div>  
                     </div>
@@ -101,10 +103,25 @@ class CustomSmartHomePanelCard extends LitElement {
     });
   }
   
+  _stateCount() {
+      let count = 0;
+      this.config.entities.map(ent => {
+          const stateObj = this.hass.states[ent.entity];
+          if(stateObj.state === "on") {
+              count++;
+          }
+      })
+      return count;
+  }
+  
   _switch(state) {
       this.hass.callService("homeassistant", "toggle", {
         entity_id: state.entity_id    
       });
+  }
+  
+  _navigate(path) {
+      window.location.href = path;
   }
   
   setConfig(config) {
@@ -156,20 +173,21 @@ class CustomSmartHomePanelCard extends LitElement {
           display:block;
           overflow:hidden;
         }
-        .side .center .icon svg {
-          
+        .side .center .icon ha-icon {
+          width: 80px;
+          height: 80px;
         }
         .side .center  h1 {
           color:#FFF;
           margin:0;
           font-weight:400;
-          font-size:34px;
+          font-size:46px;
         }
         .side .center  h3 {
           color:#FFF;
           margin:5px 0 0 0;
           font-weight:300;
-          font-size:16px;
+          font-size:24px;
         }
         
         .side .bottom {
@@ -194,6 +212,7 @@ class CustomSmartHomePanelCard extends LitElement {
             flex-direction:row;
             align-items:center;
             height:100%;
+            margin:auto;
         }
         .page > .main > .inner-main > .light {
           width:150px;
