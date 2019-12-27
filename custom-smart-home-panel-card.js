@@ -29,10 +29,10 @@ class CustomSmartHomePanelCard extends LitElement {
     var showButton = this.config.showButton == "show" ? true : false;
     var buttonText = this.config.buttonText ? this.config.buttonText : "Home";
     var buttonPath = this.config.buttonPath ? this.config.buttonPath : "/lovelace/0";
-    console.log(this.config);
+    var background = this.config.background ? this.config.background : "transparent";
     
     return html`
-        <div class="page">
+        <div class="page" style="background:${background};">
           <div class="side">
             <div class="header">
               
@@ -72,12 +72,12 @@ class CustomSmartHomePanelCard extends LitElement {
                         ${stateObj.attributes.supported_features > 9 ? html`
                             <h4 class="brightness">${stateObj.state === "off" ? 0 : Math.round(stateObj.attributes.brightness/2.55)}</h4>
                             <div class="range-holder" style="--slider-height: ${brightnessHeight};">
-                              <input type="range" style="--slider-width: ${brightnessWidth};--slider-height: ${brightnessHeight};" .value="${stateObj.state === "off" ? 0 : Math.round(stateObj.attributes.brightness/2.55)}" @change=${e => this._setBrightness(stateObj, e.target.value)}>
+                              <input type="range" class="${stateObj.state}" style="--slider-width: ${brightnessWidth};--slider-height: ${brightnessHeight};" .value="${stateObj.state === "off" ? 0 : Math.round(stateObj.attributes.brightness/2.55)}" @change=${e => this._setBrightness(stateObj, e.target.value)}>
                             </div>
                         ` : html`
                             <h4>${stateObj.state}</h4>
                             <div class="switch-holder" style="--switch-height: ${switchHeight}">
-                              <input type="range" style="--switch-width: ${switchWidth};--switch-height: ${switchHeight};" value="0" min="0" max="1" .value="${switchValue}" @change=${e => this._switch(stateObj)}>
+                              <input type="range" class="${stateObj.state}" style="--switch-width: ${switchWidth};--switch-height: ${switchHeight};" value="0" min="0" max="1" .value="${switchValue}" @change=${e => this._switch(stateObj)}>
                             </div>
                         `}
                       </div>
@@ -153,8 +153,8 @@ class CustomSmartHomePanelCard extends LitElement {
           flex-direction: row;
         }
         .page > .side {
-          width:30%;
-          padding:15px;
+          padding: 30px;
+          width: 25%;
           display:flex;
           flex-direction:column;
           background: rgb(28,122,226);
@@ -179,15 +179,17 @@ class CustomSmartHomePanelCard extends LitElement {
         }
         .side .center  h1 {
           color:#FFF;
-          margin:0;
+          margin:20px 0 0 0;
           font-weight:400;
-          font-size:46px;
+          font-size: 40px;
+          line-height: 40px;
         }
         .side .center  h3 {
           color:#FFF;
           margin:5px 0 0 0;
-          font-weight:300;
-          font-size:24px;
+          font-size: 20px;
+          font-weight: 400;
+         margin: 0;
         }
         
         .side .bottom {
@@ -201,6 +203,7 @@ class CustomSmartHomePanelCard extends LitElement {
           border-radius:4px;
           width:100%;
           display:block;
+          padding: 10px 0;
         }
         
         .page > .main {
@@ -279,7 +282,7 @@ class CustomSmartHomePanelCard extends LitElement {
           overflow: hidden;
           height: var(--slider-width);
           -webkit-appearance: none;
-          background-color: #ddd;
+          background-color: #4d4d4d;
           position: absolute;
           top: calc(50% - (var(--slider-width) / 2));
           right: calc(50% - (var(--slider-height) / 2));
@@ -287,26 +290,31 @@ class CustomSmartHomePanelCard extends LitElement {
         .range-holder input[type="range"]::-webkit-slider-runnable-track {
           height: var(--slider-width);
           -webkit-appearance: none;
-          color: #ddd;
+          color: #636363;
           margin-top: -1px;
           transition: box-shadow 0.2s ease-in-out;
         }
         .range-holder input[type="range"]::-webkit-slider-thumb {
           width: 25px;
-          border-right:10px solid #FFF;
-          border-left:10px solid #FFF;
-          border-top:20px solid #FFF;
-          border-bottom:20px solid #FFF;
+          border-right:10px solid #636363;
+          border-left:10px solid #636363;
+          border-top:20px solid #636363;
+          border-bottom:20px solid #636363;
           -webkit-appearance: none;
           height: 80px;
           cursor: ew-resize;
-          background: #fff;
-          box-shadow: -350px 0 0 350px #FFF, inset 0 0 0 80px #ddd;
+          background: #636363;
+          box-shadow: -350px 0 0 350px #636363, inset 0 0 0 80px #969696;
           border-radius: 0;
           transition: box-shadow 0.2s ease-in-out;
           position: relative;
           top: calc((var(--slider-width) - 80px) / 2);
         }
+        // .range-holder input[type="range"].on::-webkit-slider-thumb {
+        //     border-color: #1c7ae2;
+        //     box-shadow: -350px 0 0 350px #1c7ae2, inset 0 0 0 80px #FFF;
+        // }
+        
         .switch-holder {
           height: var(--switch-height);
           position:relative;
@@ -327,7 +335,7 @@ class CustomSmartHomePanelCard extends LitElement {
           overflow: hidden;
           height: calc(var(--switch-width) - 20px);
           -webkit-appearance: none;
-          background-color: #ddd;
+          background-color: #4d4d4d;
           padding: 10px;
           position: absolute;
           top: calc(50% - (var(--switch-width) / 2));
@@ -336,7 +344,7 @@ class CustomSmartHomePanelCard extends LitElement {
         .switch-holder input[type="range"]::-webkit-slider-runnable-track {
           height: calc(var(--switch-width) - 20px);
           -webkit-appearance: none;
-          color: #ddd;
+          color: #636363;
           margin-top: -1px;
           transition: box-shadow 0.2s ease-in-out;
         }
@@ -345,49 +353,16 @@ class CustomSmartHomePanelCard extends LitElement {
           -webkit-appearance: none;
           height: calc(var(--switch-width) - 20px);
           cursor: ew-resize;
-          background: #fff;
+          background: #636363;
           transition: box-shadow 0.2s ease-in-out;
-          box-shadow: -340px 0 0 350px #ddd, inset 0 0 0 80px #FFF;
+          box-shadow: -340px 0 0 350px #4d4d4d, inset 0 0 0 80px #969696;
           position: relative;
           top: 0;
           border-radius: 4px;
         }
-        
-        .scene-holder {
-          display: flex;
-          flex-direction: column;
-          margin-top:20px;
-        }
-        .scene-row {
-          display:block;
-          text-align:center;
-          padding-bottom:10px;
-        }
-        .scene-row:last-child {
-          padding:0;
-        }
-        .scene-holder .scene {
-          display:inline-block;
-          margin-right:10px;
-          cursor:pointer;
-        }
-        .scene-holder .scene:nth-child(4n) {
-          margin-right:0;
-        }
-        .scene-holder .scene .color {
-          width:50px;
-          height:50px;
-          border-radius:50%;
-          display:block;
-        }
-        .scene-holder .scene .name {
-          width:50px;
-          overflow:hidden;
-          display:block;
-          color: #FFF;
-          font-size: 9px;
-          margin-top:3px;
-        }
+        // .switch-holder input[type="range"].on::-webkit-slider-thumb {
+        //     box-shadow: -340px 0 0 350px #4d4d4d, inset 0 0 0 80px #1c7ae2;
+        // }
         
         .toggle {
           margin-top:30px;
